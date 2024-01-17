@@ -23,9 +23,11 @@ import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** This class represents the schema for a Google BigQuery Table or data source. */
 public final class Schema implements Serializable {
@@ -82,6 +84,15 @@ public final class Schema implements Serializable {
   /** Creates a {@code Schema} object given some fields. */
   public static Schema of(Field... fields) {
     return new Schema(FieldList.of(fields));
+  }
+
+  // creates a schema object given TableFieldSchema fields
+  public static Schema of(List<TableFieldSchema> fields) {
+    return new Schema(FieldList.of(FieldList.fromPb(fields)));
+  }
+  // creates a schema object given TableFieldSchema fields
+  public static Schema of(TableFieldSchema ... fields) {
+    return new Schema(FieldList.of(FieldList.fromPb(Arrays.asList(fields))));
   }
 
   TableSchema toPb() {
